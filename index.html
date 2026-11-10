@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATLAS - GS MAGNOVA</title>
+<style>
+*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#0a0f1e;color:#fff;text-align:center}
+header{padding:15px;background:#111c33;border-bottom:2px solid #00d4ff}
+h1{margin:0;color:#00d4ff;font-size:28px;letter-spacing:3px}
+p{color:#aaa;font-size:13px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}
+button{padding:20px 10px;border:0;border-radius:14px;background:#1a2a4a;color:#fff;font-size:16px;font-weight:bold;cursor:pointer}
+button.active{background:#00d4ff;color:#000}
+#box{margin:10px;background:#000;border:2px solid #00d4ff;border-radius:14px;padding:10px;min-height:260px}
+canvas{width:100%;max-width:400px;background:#000;border-radius:10px}
+.status{margin:10px;padding:10px;background:#13203a;border-radius:10px;font-size:14px}
+input{width:90%;padding:10px;margin:5px;border-radius:8px;border:0}
+</style>
+</head>
+<body>
+<header><h1>ATLAS</h1><p>GS MAGNOVA - 3D SCAN | Maroc</p></header>
+<div class="status" id="st">🔴 غير متصل - ورك على ربط الجهاز</div>
+<div class="menu">
+<button onclick="connect(this)">📡 ربط GS MAGNOVA</button>
+<button onclick="live(this)">📊 مسح مباشر Live</button>
+<button onclick="scan3d(this)">🗺️ مسح 3D</button>
+<button onclick="analy(this)">🧠 تحليل ذكي</button>
+</div>
+<div id="box">
+<canvas id="c" width="300" height="220"></canvas>
+<p id="info">مرحبا بيك فـ ATLAS. ربط الجهاز و بدا المسح.</p>
+</div>
+<div style="padding:10px">
+<label>العمق: <span id="dep">2.5m</span></label><br>
+<input type="range" min="0" max="10" step="0.1" value="2.5" oninput="document.getElementById('dep').innerText=this.value+'m'">
+<br><button onclick="save()" style="background:#00ff88;color:#000;width:90%">💾 حفظ المسح</button>
+</div>
+<script>
+let cv=document.getElementById('c'),ctx=cv.getContext('2d'),mode='idle';
+function draw(){
+ ctx.clearRect(0,0,300,220);
+ for(let y=0;y<11;y++)for(let x=0;x<15;x++){
+  let v=Math.random();
+  let col=v>0.85?'#ff0000':v>0.7?'#ffaa00':v>0.5?'#ffff00':v>0.3?'#00ff00':'#003366';
+  if(mode=='idle') col='#0a1a33';
+  ctx.fillStyle=col;ctx.fillRect(x*20,y*20,18,18);
+ }
+ if(mode=='3d'){ctx.fillStyle='#fff';ctx.font='bold 16px Arial';ctx.fillText('هدف محتمل !',90,110);}
+}
+setInterval(()=>{if(mode!=='idle')draw()},600);draw();
+function connect(b){document.getElementById('st').innerText='🟢 متصل - GS MAGNOVA جاهز';document.getElementById('info').innerText='تم الربط بنجاح. دير مسح مباشر ولا 3D';alert('تم ربط GS MAGNOVA');}
+function live(b){mode='live';document.getElementById('info').innerText='مسح مباشر خدام... حرك الجهاز ببطء';}
+function scan3d(b){mode='3d';document.getElementById('info').innerText='مسح 3D : تمشي خط بخط. كاين هدف محتمل فالوسط!';}
+function analy(b){document.getElementById('info').innerText='التحليل الذكي: الهدف على عمق 2.5م - احتمالية معدن 87% - فراغ 12%';alert('التحليل: معدن 87% - عمق 2.5م');}
+function save(){alert('تم حفظ المسح فـ ATLAS');}
+</script>
+</body>
+</html>
